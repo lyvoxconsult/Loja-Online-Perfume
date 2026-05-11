@@ -770,7 +770,7 @@ function ProductCard({ product, navigate }: { product: Product; navigate: (page:
         <Rating product={product} />
         <Price product={product} />
         <p>{product.family} | {product.volume}</p>
-        <button className="primary full" onClick={() => addToCart(product.id)}>
+        <button className="catalog-buy-btn" onClick={() => addToCart(product.id)}>
           Comprar
         </button>
       </div>
