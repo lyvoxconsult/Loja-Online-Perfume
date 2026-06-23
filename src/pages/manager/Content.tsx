@@ -8,10 +8,6 @@ import { FileText, Save } from "lucide-react";
 import { toast } from "sonner";
 import { SEO } from "@/components/common/SEO";
 
-/**
- * Editor de conteúdo institucional — armazenamento local mock.
- * PLACEHOLDER: na próxima fase, persistir em tabela `site_content`.
- */
 const STORAGE_KEY = "lumina:site-content";
 
 interface SiteContent {
@@ -97,14 +93,12 @@ const ManagerContent = () => {
       </Card>
 
       <div className="flex justify-end">
-        <Button onClick={save} className="bg-gradient-accent hover:opacity-95">
+        <Button onClick={save}>
           <Save className="h-4 w-4 mr-2" /> Salvar alterações
         </Button>
       </div>
 
-      <p className="text-xs text-muted-foreground italic">
-        * Persistência local nesta fase. Próximo passo: persistir em tabela `site_content` no banco.
-      </p>
+      <p className="text-xs text-muted-foreground">As alterações são persistidas somente neste navegador demonstrativo.</p>
     </div>
   );
 };

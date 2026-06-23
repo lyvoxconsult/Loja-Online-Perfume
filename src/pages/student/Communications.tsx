@@ -14,6 +14,7 @@ import {
 const Communications = () => {
   const { user } = useAuth();
   const [items, setItems] = useState<Communication[]>([]);
+  const [readIds, setReadIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (!user) return;
@@ -27,6 +28,8 @@ const Communications = () => {
     );
     
     setItems(userCommunications);
+    const beforeRead = new Set(userCommunications.filter((communication) => communication.read).map((communication) => communication.id));
+    setReadIds(beforeRead);
 
     // Marcar todos como lidos após carregar
     if (userCommunications.length > 0) {
@@ -66,7 +69,7 @@ const Communications = () => {
       ) : (
         <div className="space-y-3">
           {items.map((n) => (
-            <Card key={n.id} className={!n.read ? "border-l-4 border-l-accent" : ""}>
+            <Card key={n.id} className={!readIds.has(n.id) && !n.read ? "border-l-4 border-l-accent" : ""}>
               <CardContent className="p-5 flex gap-4">
                 <div className="h-10 w-10 rounded-lg bg-accent/10 text-accent flex items-center justify-center shrink-0">
                   <Bell className="h-5 w-5" />
@@ -79,7 +82,7 @@ const Communications = () => {
                     </span>
                   </div>
                   <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">{n.body}</p>
-                  {!n.read && (
+                  {!readIds.has(n.id) && !n.read && (
                     <Badge variant="default" className="text-xs mt-2 bg-accent">
                       Novo
                     </Badge>

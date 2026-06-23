@@ -5,7 +5,7 @@ import { Award, Heart, Globe2, Lightbulb, Target, Users } from "lucide-react";
 
 const About = () => {
   const differentials = [
-    { icon: Award, title: "Certificações reconhecidas", desc: "Parcerias com Cambridge, IELTS e TOEFL para validação internacional." },
+    { icon: Award, title: "Trilhas certificadas", desc: "Avaliações demonstrativas alinhadas a níveis internacionais de proficiência." },
     { icon: Heart, title: "Ensino humanizado", desc: "Cada aluno é único. Acompanhamento próximo do início ao fim da jornada." },
     { icon: Globe2, title: "Comunidade global", desc: "Eventos, clubes de conversação e intercâmbio com alunos de outros países." },
     { icon: Lightbulb, title: "Metodologia ativa", desc: "Aprenda fazendo. Projetos reais, debates e simulações desde o nível básico." },

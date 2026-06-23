@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -38,6 +37,7 @@ import { EmptyState } from "@/components/common/EmptyState";
 import { SEO } from "@/components/common/SEO";
 import { FileUploader, type UploadedFile } from "@/components/common/FileUploader";
 import { cn } from "@/lib/utils";
+import { getStudentDirectory } from "@/services/demoSchool";
 
 const STORAGE_KEY = "lumina:materials";
 
@@ -160,17 +160,7 @@ const ManagerMaterials = () => {
     // Carregar materiais do localStorage
     setItems(loadMaterials());
     
-    // Tentar carregar alunos do Supabase
-    try {
-      const [pRes, rRes] = await Promise.all([
-        supabase.from("profiles").select("id, full_name"),
-        supabase.from("user_roles").select("user_id").eq("role", "aluno"),
-      ]);
-      const ids = new Set((rRes.data ?? []).map((r) => r.user_id));
-      setStudents((pRes.data ?? []).filter((p) => ids.has(p.id)));
-    } catch {
-      setStudents([]);
-    }
+    setStudents(getStudentDirectory());
     
     setLoading(false);
   };
@@ -258,22 +248,14 @@ const ManagerMaterials = () => {
 
   const handleViewFile = (file: MaterialFile) => {
     if (file.dataUrl) {
-      // Para arquivos em base64, abre em nova aba
-      const win = window.open("", "_blank");
-      if (win) {
-        if (file.type.includes("image")) {
-          win.document.write(`<img src="${file.dataUrl}" style="max-width:100%;height:auto;" />`);
-        } else if (file.type.includes("pdf")) {
-          win.document.write(`<iframe src="${file.dataUrl}" style="width:100%;height:100vh;border:none;"></iframe>`);
-        } else {
-          // Download para outros tipos
-          const link = document.createElement("a");
-          link.href = file.dataUrl;
-          link.download = file.name;
-          link.click();
-          win.close();
-        }
+      if (file.type.includes("image") || file.type.includes("pdf")) {
+        window.open(file.dataUrl, "_blank", "noopener,noreferrer");
+        return;
       }
+      const link = document.createElement("a");
+      link.href = file.dataUrl;
+      link.download = file.name;
+      link.click();
     } else if (file.name) {
       toast.info(`Arquivo: ${file.name}`);
     }

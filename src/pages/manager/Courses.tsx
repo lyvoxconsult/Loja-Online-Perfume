@@ -205,7 +205,7 @@ const ManagerCourses = () => {
                       <SelectItem value="teens">Teens (12-17 anos)</SelectItem>
                       <SelectItem value="adults">Adultos</SelectItem>
                       <SelectItem value="business">Business</SelectItem>
-                      <SelectItem value="exam">Exames (IELTS/TOEFL)</SelectItem>
+                      <SelectItem value="exam">Exames internacionais</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -326,12 +326,12 @@ const ManagerCourses = () => {
                     {c.duration && <span className="text-xs text-muted-foreground ml-1">/ {c.duration}</span>}
                   </div>
                   <div className="flex gap-1">
-                    <Button variant="ghost" size="sm" onClick={() => openEdit(c)} className="h-8 px-2">
+                    <Button variant="ghost" size="sm" aria-label={`Editar ${c.title}`} onClick={() => openEdit(c)} className="h-8 px-2">
                       <Pencil className="h-3.5 w-3.5" />
                     </Button>
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
-                        <Button variant="ghost" size="sm" className="h-8 px-2 text-destructive hover:text-destructive">
+                        <Button variant="ghost" size="sm" aria-label={`Excluir ${c.title}`} className="h-8 px-2 text-destructive hover:text-destructive">
                           <Trash2 className="h-3.5 w-3.5" />
                         </Button>
                       </AlertDialogTrigger>

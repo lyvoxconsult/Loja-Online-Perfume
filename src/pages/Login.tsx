@@ -7,10 +7,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { GraduationCap, ShieldCheck, Info, Loader2 } from "lucide-react";
+import { GraduationCap, ShieldCheck, Info, Loader2, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth, type AppRole } from "@/context/AuthContext";
-import { ensureDemoUsers } from "@/services/demoSeed";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -20,11 +19,6 @@ const Login = () => {
   const [email, setEmail] = useState("aluno@lumina.com");
   const [password, setPassword] = useState("123456");
   const [loading, setLoading] = useState(false);
-  const [seeding, setSeeding] = useState(true);
-
-  useEffect(() => {
-    ensureDemoUsers().finally(() => setSeeding(false));
-  }, []);
 
   // Já logado? redireciona
   useEffect(() => {
@@ -57,16 +51,18 @@ const Login = () => {
     <div className="min-h-screen grid lg:grid-cols-2 bg-background">
       <SEO title="Entrar" description="Acesse o portal Lumina English Academy." />
 
-      <div className="hidden lg:flex relative overflow-hidden bg-gradient-hero text-primary-foreground p-12 flex-col justify-between">
+      <div className="hidden lg:flex relative overflow-hidden bg-primary text-primary-foreground p-12 flex-col justify-between">
         <Logo variant="white" />
         <div className="relative z-10">
-          <h2 className="text-4xl font-bold leading-tight mb-4 text-balance">Aprenda inglês de verdade, viva o mundo.</h2>
+          <p className="mb-3 text-sm font-semibold text-secondary">DEMONSTRAÇÃO COMERCIAL</p>
+          <h2 className="text-4xl font-bold leading-tight mb-4 text-balance">Uma escola completa em uma única experiência.</h2>
           <p className="text-primary-foreground/80 leading-relaxed max-w-md">
-            Acesse seu portal para acompanhar progresso, aulas, materiais e comunicações.
+            Alterne entre os perfis para validar gestão, aprendizagem, conteúdo e comunicação.
           </p>
+          <div className="mt-8 space-y-3">
+            {["Dados fictícios persistidos no navegador", "Permissões isoladas por perfil", "Fluxos funcionais sem backend"].map((item) => <div key={item} className="flex items-center gap-3 text-sm text-primary-foreground/80"><CheckCircle2 className="h-4 w-4 text-secondary" /> {item}</div>)}
+          </div>
         </div>
-        <div className="absolute -bottom-32 -right-20 h-96 w-96 rounded-full bg-accent/30 blur-3xl" aria-hidden="true" />
-        <div className="absolute -top-20 -left-20 h-72 w-72 rounded-full bg-secondary/30 blur-3xl" aria-hidden="true" />
         <p className="text-xs text-primary-foreground/60 relative z-10">© {new Date().getFullYear()} Lumina English Academy</p>
       </div>
 
@@ -94,8 +90,8 @@ const Login = () => {
                       <Label htmlFor="password">Senha</Label>
                       <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="mt-1.5" autoComplete="current-password" required minLength={6} />
                     </div>
-                    <Button type="submit" disabled={loading || seeding} className="w-full bg-gradient-accent hover:opacity-95 h-11">
-                      {loading ? (<><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Entrando...</>) : seeding ? (<><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Preparando demo...</>) : `Entrar como ${tab === "aluno" ? "Aluno" : "Gestor"}`}
+                    <Button type="submit" disabled={loading} className="w-full h-11">
+                      {loading ? (<><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Entrando...</>) : `Entrar como ${tab === "aluno" ? "Aluno" : "Gestor"}`}
                     </Button>
                   </form>
                   <div className="mt-5 flex items-start gap-2 rounded-lg bg-muted/60 p-3 text-xs text-muted-foreground">

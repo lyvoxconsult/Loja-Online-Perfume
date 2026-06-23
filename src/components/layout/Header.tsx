@@ -47,7 +47,7 @@ export const Header = () => {
 
         <div className="hidden lg:flex items-center gap-2">
           {user ? (
-            <Button asChild size="sm" className="bg-gradient-accent hover:opacity-95 shadow-soft">
+            <Button asChild size="sm" className="shadow-soft">
               <Link to={dashboardPath}><LayoutDashboard className="h-4 w-4 mr-1.5" /> Meu painel</Link>
             </Button>
           ) : (
@@ -55,7 +55,7 @@ export const Header = () => {
               <Button asChild variant="ghost" size="sm">
                 <Link to="/login">Entrar</Link>
               </Button>
-              <Button asChild size="sm" className="bg-gradient-accent hover:opacity-95 shadow-soft">
+              <Button asChild size="sm" className="shadow-soft">
                 <Link to="/cursos">Matricule-se</Link>
               </Button>
             </>
@@ -95,7 +95,7 @@ export const Header = () => {
               <Button asChild variant="outline" size="sm" onClick={() => setOpen(false)}>
                 <Link to="/login">Entrar</Link>
               </Button>
-              <Button asChild size="sm" className="bg-gradient-accent" onClick={() => setOpen(false)}>
+              <Button asChild size="sm" onClick={() => setOpen(false)}>
                 <Link to="/cursos">Matricule-se</Link>
               </Button>
             </div>

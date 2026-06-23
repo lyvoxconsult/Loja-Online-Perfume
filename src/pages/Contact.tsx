@@ -37,9 +37,8 @@ const Contact = () => {
     }
     setErrors({});
     setSubmitting(true);
-    // PLACEHOLDER: envio de e-mail (Resend/SendGrid)
     await new Promise((r) => setTimeout(r, 700));
-    toast.success("Mensagem enviada!", { description: "Entraremos em contato em até 24h." });
+    toast.success("Mensagem registrada!", { description: "A solicitação foi salva nesta demonstração." });
     setData({ name: "", email: "", message: "" });
     setSubmitting(false);
   };
@@ -100,7 +99,7 @@ const Contact = () => {
                   />
                   {errors.message && <p id="msg-err" className="text-xs text-destructive mt-1">{errors.message}</p>}
                 </div>
-                <Button type="submit" disabled={submitting} className="w-full bg-gradient-accent hover:opacity-95 h-11">
+                <Button type="submit" disabled={submitting} className="w-full h-11">
                   {submitting ? "Enviando..." : (<><Send className="h-4 w-4 mr-2" /> Enviar mensagem</>)}
                 </Button>
               </form>
@@ -116,7 +115,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold text-primary">Endereço</h4>
-                    <p className="text-sm text-muted-foreground">Av. Paulista, 1000 — São Paulo, SP</p>
+                    <p className="text-sm text-muted-foreground">Campus Lumina Demo · Unidade Central</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -125,7 +124,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold text-primary">Telefone</h4>
-                    <p className="text-sm text-muted-foreground">+55 (11) 4000-1000</p>
+                    <p className="text-sm text-muted-foreground">+55 (11) 4000-2026</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -134,17 +133,17 @@ const Contact = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold text-primary">E-mail</h4>
-                    <p className="text-sm text-muted-foreground">hello@lumina.com</p>
+                    <p className="text-sm text-muted-foreground">contato@lumina.demo</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <div className="aspect-[4/3] rounded-2xl bg-gradient-to-br from-muted via-secondary/20 to-accent/20 flex items-center justify-center text-muted-foreground border border-border" aria-label="Mapa placeholder">
+            <div className="aspect-[4/3] rounded-lg bg-muted flex items-center justify-center text-muted-foreground border border-border" aria-label="Localização da unidade demonstrativa">
               <div className="text-center">
                 <MapPin className="h-10 w-10 mx-auto mb-2 text-accent" />
-                <p className="text-sm font-medium">Mapa interativo</p>
-                <p className="text-xs">{/* PLACEHOLDER: integração Google Maps */}Em breve</p>
+                <p className="text-sm font-medium">Unidade Central Demo</p>
+                <p className="text-xs">Localização fictícia para apresentação</p>
               </div>
             </div>
           </div>

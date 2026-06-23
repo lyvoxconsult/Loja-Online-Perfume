@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { GraduationCap, Clock, Globe, ArrowRight, Check } from "lucide-react";
 import { EmptyState } from "@/components/common/EmptyState";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 const levels: Array<"all" | Level> = ["all", "A1", "A2", "B1", "B2", "C1", "C2"];
 const formats: Array<"all" | Format> = ["all", "online", "presencial", "hibrido"];
@@ -65,7 +66,7 @@ const Courses = () => {
                     key={l}
                     onClick={() => setLevel(l)}
                     className={cn(
-                      "px-3.5 py-1.5 rounded-full text-sm font-medium border transition-all",
+                      "px-3.5 py-1.5 rounded-md text-sm font-medium border transition-all",
                       level === l
                         ? "bg-primary text-primary-foreground border-primary"
                         : "bg-background border-border text-muted-foreground hover:border-primary/40 hover:text-primary"
@@ -84,7 +85,7 @@ const Courses = () => {
                     key={f}
                     onClick={() => setFormat(f)}
                     className={cn(
-                      "px-3.5 py-1.5 rounded-full text-sm font-medium border transition-all",
+                      "px-3.5 py-1.5 rounded-md text-sm font-medium border transition-all",
                       format === f
                         ? "bg-primary text-primary-foreground border-primary"
                         : "bg-background border-border text-muted-foreground hover:border-primary/40 hover:text-primary"
@@ -105,7 +106,7 @@ const Courses = () => {
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {filtered.map((c) => (
               <Card key={c.id} className="overflow-hidden hover:shadow-elevated hover:-translate-y-0.5 transition-all duration-300 group cursor-pointer" onClick={() => setActive(c)}>
-                <div className="aspect-video bg-gradient-accent flex items-center justify-center text-primary-foreground">
+                <div className="aspect-video bg-primary flex items-center justify-center text-primary-foreground">
                   <GraduationCap className="h-12 w-12 opacity-90" />
                 </div>
                 <CardContent className="p-6 space-y-3">
@@ -159,8 +160,7 @@ const Courses = () => {
                     <p className="text-xs text-muted-foreground">Investimento</p>
                     <p className="text-2xl font-bold text-primary">R$ {active.price}<span className="text-base font-normal text-muted-foreground">/mês</span></p>
                   </div>
-                  {/* PLACEHOLDER: integração com Stripe */}
-                  <Button className="bg-gradient-accent hover:opacity-95">Matricular agora</Button>
+                  <Button onClick={() => { localStorage.setItem("lumina:demo:selected-course", active.id); toast.success("Interesse registrado nesta demonstração."); setActive(null); }}>Matricular agora</Button>
                 </div>
               </div>
             </>

@@ -23,9 +23,8 @@ export const ProtectedRoute = ({ children, requireRole }: ProtectedRouteProps) =
     return <Navigate to="/login" replace state={{ from: location.pathname }} />;
   }
 
-  if (requireRole && role && role !== requireRole) {
-    // redireciona para a área correta do papel atual
-    const target = role === "gestor" ? "/gestor/dashboard" : "/aluno/dashboard";
+  if (requireRole && role !== requireRole) {
+    const target = role === "gestor" ? "/gestor/dashboard" : role === "aluno" ? "/aluno/dashboard" : "/login";
     return <Navigate to={target} replace />;
   }
 

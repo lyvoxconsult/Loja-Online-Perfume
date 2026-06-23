@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { Languages } from "lucide-react";
 
 interface LogoProps {
   className?: string;
@@ -12,11 +13,8 @@ export const Logo = ({ className, variant = "default", showText = true }: LogoPr
 
   return (
     <Link to="/" className={cn("inline-flex items-center gap-2.5 group", className)} aria-label="Lumina English Academy">
-      <span className="relative inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-accent shadow-soft transition-transform group-hover:scale-105">
-        <svg viewBox="0 0 32 32" className="h-5 w-5 text-primary-foreground" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M9 7v18h14" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-          <ellipse cx="16" cy="16" rx="11" ry="5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.55" />
-        </svg>
+      <span className="relative inline-flex h-9 w-9 items-center justify-center rounded-lg bg-secondary shadow-soft transition-transform group-hover:scale-105">
+        <Languages className="h-5 w-5 text-secondary-foreground" aria-hidden="true" />
       </span>
       {showText && (
         <span className="flex flex-col leading-none">

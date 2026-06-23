@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Facebook, Instagram, Linkedin, Youtube, Mail, MapPin, Phone } from "lucide-react";
+import { Mail, MapPin, Phone } from "lucide-react";
 import { Logo } from "@/components/common/Logo";
 
 export const Footer = () => (
@@ -11,23 +11,7 @@ export const Footer = () => (
           <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
             Aprenda inglês de verdade, viva o mundo. Educação internacional com método comprovado.
           </p>
-          <div className="flex gap-2 pt-1">
-            {[
-              { icon: Instagram, label: "Instagram" },
-              { icon: Facebook, label: "Facebook" },
-              { icon: Linkedin, label: "LinkedIn" },
-              { icon: Youtube, label: "YouTube" },
-            ].map(({ icon: Icon, label }) => (
-              <a
-                key={label}
-                href="#"
-                aria-label={label}
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors"
-              >
-                <Icon className="h-4 w-4" />
-              </a>
-            ))}
-          </div>
+          <p className="text-xs font-medium text-secondary">Projeto demonstrativo com conteúdo fictício.</p>
         </div>
 
         <div>
@@ -52,7 +36,7 @@ export const Footer = () => (
             <li><Link to="/login" className="text-muted-foreground hover:text-accent">Portal do aluno</Link></li>
             <li><Link to="/login" className="text-muted-foreground hover:text-accent">Portal do gestor</Link></li>
             <li><Link to="/contato" className="text-muted-foreground hover:text-accent">Suporte</Link></li>
-            <li><a href="#" className="text-muted-foreground hover:text-accent">Política de privacidade</a></li>
+            <li><Link to="/sobre" className="text-muted-foreground hover:text-accent">Sobre a demonstração</Link></li>
           </ul>
         </div>
 
@@ -61,15 +45,15 @@ export const Footer = () => (
           <ul className="space-y-3 text-sm text-muted-foreground">
             <li className="flex items-start gap-2.5">
               <MapPin className="h-4 w-4 mt-0.5 text-accent shrink-0" />
-              <span>Av. Paulista, 1000 — São Paulo, BR</span>
+              <span>Campus Lumina Demo · Unidade Central</span>
             </li>
             <li className="flex items-center gap-2.5">
               <Phone className="h-4 w-4 text-accent shrink-0" />
-              <span>+55 (11) 4000-1000</span>
+              <span>+55 (11) 4000-2026</span>
             </li>
             <li className="flex items-center gap-2.5">
               <Mail className="h-4 w-4 text-accent shrink-0" />
-              <a href="mailto:hello@lumina.com" className="hover:text-accent">hello@lumina.com</a>
+              <a href="mailto:contato@lumina.demo" className="hover:text-accent">contato@lumina.demo</a>
             </li>
           </ul>
         </div>

@@ -1,20 +1,36 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { SEO } from "@/components/common/SEO";
 import { SectionHeader } from "@/components/common/SectionHeader";
-import { posts } from "@/mocks/posts";
+import type { Post } from "@/mocks/posts";
+import { loadPublishedPosts } from "@/services/posts";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Search, Clock, ArrowRight } from "lucide-react";
+import { Search, Clock, ArrowRight, BookOpenText } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import { EmptyState } from "@/components/common/EmptyState";
 import { cn } from "@/lib/utils";
 
 const Blog = () => {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<string>("all");
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [newsletterEmail, setNewsletterEmail] = useState("");
 
-  const categories = useMemo(() => ["all", ...Array.from(new Set(posts.map((p) => p.category)))], []);
+  useEffect(() => {
+    const sync = () => setPosts(loadPublishedPosts());
+    sync();
+    window.addEventListener("storage", sync);
+    window.addEventListener("lumina:posts-updated", sync);
+    return () => {
+      window.removeEventListener("storage", sync);
+      window.removeEventListener("lumina:posts-updated", sync);
+    };
+  }, []);
+
+  const categories = useMemo(() => ["all", ...Array.from(new Set(posts.map((p) => p.category)))], [posts]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -23,7 +39,7 @@ const Blog = () => {
       const matchQ = !q || p.title.toLowerCase().includes(q) || p.excerpt.toLowerCase().includes(q);
       return matchCat && matchQ;
     });
-  }, [query, category]);
+  }, [posts, query, category]);
 
   return (
     <>
@@ -55,7 +71,7 @@ const Blog = () => {
                     key={c}
                     onClick={() => setCategory(c)}
                     className={cn(
-                      "px-3.5 py-1.5 rounded-full text-sm font-medium border transition-all",
+                      "px-3.5 py-1.5 rounded-md text-sm font-medium border transition-all",
                       category === c
                         ? "bg-primary text-primary-foreground border-primary"
                         : "bg-background border-border text-muted-foreground hover:border-primary/40 hover:text-primary"
@@ -74,7 +90,9 @@ const Blog = () => {
                 {filtered.map((p) => (
                   <Link to={`/blog/${p.slug}`} key={p.id}>
                     <Card className="overflow-hidden h-full hover:shadow-elevated hover:-translate-y-0.5 transition-all group">
-                      <div className="aspect-[16/10] bg-gradient-to-br from-primary via-secondary to-accent" />
+                      <div className="aspect-[16/10] bg-primary flex items-center justify-center text-primary-foreground">
+                        <BookOpenText className="h-12 w-12 opacity-80" />
+                      </div>
                       <CardContent className="p-6 space-y-3">
                         <div className="flex items-center gap-2">
                           <Badge variant="secondary" className="bg-accent/10 text-accent border-accent/20">{p.category}</Badge>
@@ -86,7 +104,7 @@ const Blog = () => {
                         <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">{p.excerpt}</p>
                         <div className="flex items-center justify-between pt-2">
                           <div className="flex items-center gap-2">
-                            <div className="h-7 w-7 rounded-full bg-gradient-accent text-primary-foreground flex items-center justify-center text-[10px] font-bold">{p.authorInitials}</div>
+                            <div className="h-7 w-7 rounded-full bg-secondary text-secondary-foreground flex items-center justify-center text-[10px] font-bold">{p.authorInitials}</div>
                             <span className="text-xs text-muted-foreground">{p.author}</span>
                           </div>
                           <ArrowRight className="h-4 w-4 text-accent opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -114,11 +132,22 @@ const Blog = () => {
                 </ul>
               </CardContent>
             </Card>
-            <Card className="bg-gradient-hero text-primary-foreground">
+            <Card className="bg-primary text-primary-foreground">
               <CardContent className="p-5">
                 <h4 className="font-display font-semibold mb-2">Newsletter</h4>
                 <p className="text-sm text-primary-foreground/80 mb-4">Receba conteúdos semanais para acelerar seu inglês.</p>
-                <Input placeholder="Seu e-mail" className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/50" />
+                <form
+                  className="space-y-2"
+                  onSubmit={(event) => {
+                    event.preventDefault();
+                    if (!newsletterEmail.includes("@")) return toast.error("Informe um e-mail válido.");
+                    setNewsletterEmail("");
+                    toast.success("Inscrição confirmada para esta demonstração.");
+                  }}
+                >
+                  <Input value={newsletterEmail} onChange={(event) => setNewsletterEmail(event.target.value)} placeholder="Seu e-mail" className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/50" />
+                  <Button type="submit" variant="secondary" className="w-full">Inscrever-se</Button>
+                </form>
               </CardContent>
             </Card>
           </aside>

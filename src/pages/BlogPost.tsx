@@ -1,21 +1,31 @@
 import { Link, useParams, Navigate } from "react-router-dom";
 import { SEO } from "@/components/common/SEO";
-import { posts } from "@/mocks/posts";
+import { findPublishedPost, loadPublishedPosts } from "@/services/posts";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Clock, Calendar } from "lucide-react";
+import { ArrowLeft, Clock, Calendar, BookOpenText, Linkedin, Share2 } from "lucide-react";
+import { toast } from "sonner";
 
 const formatDate = (iso: string) =>
   new Date(iso).toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" });
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
-  const post = posts.find((p) => p.slug === slug);
+  const post = findPublishedPost(slug);
 
   if (!post) return <Navigate to="/blog" replace />;
 
-  const related = posts.filter((p) => p.id !== post.id).slice(0, 3);
+  const related = loadPublishedPosts().filter((p) => p.id !== post.id).slice(0, 3);
+
+  const share = async () => {
+    const url = window.location.href;
+    if (navigator.share) await navigator.share({ title: post.title, text: post.excerpt, url });
+    else {
+      await navigator.clipboard.writeText(url);
+      toast.success("Link copiado.");
+    }
+  };
 
   return (
     <>
@@ -33,14 +43,16 @@ const BlogPost = () => {
             <p className="text-lg text-muted-foreground leading-relaxed mb-6">{post.excerpt}</p>
             <div className="flex items-center gap-5 text-sm text-muted-foreground pb-6 mb-8 border-b border-border">
               <div className="flex items-center gap-2">
-                <div className="h-9 w-9 rounded-full bg-gradient-accent text-primary-foreground flex items-center justify-center text-xs font-bold">{post.authorInitials}</div>
+                <div className="h-9 w-9 rounded-full bg-secondary text-secondary-foreground flex items-center justify-center text-xs font-bold">{post.authorInitials}</div>
                 <span className="font-medium text-foreground">{post.author}</span>
               </div>
               <span className="inline-flex items-center gap-1.5"><Calendar className="h-3.5 w-3.5" /> {formatDate(post.publishedAt)}</span>
               <span className="inline-flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" /> {post.readingTime} min</span>
             </div>
 
-            <div className="aspect-[16/9] rounded-2xl bg-gradient-to-br from-primary via-secondary to-accent mb-10" />
+            <div className="aspect-[16/9] rounded-lg bg-primary text-primary-foreground flex items-center justify-center mb-10">
+              <BookOpenText className="h-16 w-16 opacity-75" />
+            </div>
 
             <div className="prose prose-slate max-w-none">
               {post.content.split("\n\n").map((block, i) => {
@@ -51,10 +63,14 @@ const BlogPost = () => {
               })}
             </div>
 
-            <div className="mt-10 pt-6 border-t border-border flex flex-wrap gap-2">
+            <div className="mt-10 pt-6 border-t border-border flex flex-wrap items-center gap-2">
               {post.tags.map((t) => (
                 <Badge key={t} variant="outline" className="capitalize">#{t}</Badge>
               ))}
+              <Button variant="outline" size="sm" className="ml-auto" onClick={share}><Share2 className="h-4 w-4 mr-2" /> Compartilhar</Button>
+              <Button asChild variant="outline" size="icon" aria-label="Compartilhar no LinkedIn">
+                <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`} target="_blank" rel="noreferrer"><Linkedin className="h-4 w-4" /></a>
+              </Button>
             </div>
           </div>
 

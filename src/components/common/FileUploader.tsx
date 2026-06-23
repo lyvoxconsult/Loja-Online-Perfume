@@ -31,7 +31,7 @@ const ALLOWED_TYPES = {
   ],
   audio: ["audio/mpeg", "audio/wav", "audio/ogg", "audio/mp3", "audio/x-m4a"],
   video: ["video/mp4", "video/webm", "video/ogg", "video/avi", "video/quicktime"],
-  image: ["image/jpeg", "image/png", "image/gif", "image/webp", "image/svg+xml"],
+  image: ["image/jpeg", "image/png", "image/gif", "image/webp"],
 };
 
 const ALL_ALLOWED = Object.values(ALLOWED_TYPES).flat();
@@ -53,14 +53,14 @@ const formatSize = (bytes: number) => {
 export const FileUploader = ({
   files,
   onFilesChange,
-  maxFiles = 10,
-  maxSizeMB = 50,
+  maxFiles = 3,
+  maxSizeMB = 2,
   accept = ALL_ALLOWED,
 }: FileUploaderProps) => {
   const [isDragging, setIsDragging] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
 
-  const validateFile = (file: File): string | null => {
+  const validateFile = useCallback((file: File): string | null => {
     if (!accept.includes(file.type) && !accept.some((t) => file.type.startsWith(t.replace("/*", "/")))) {
       return `Tipo de arquivo não permitido: ${file.name}`;
     }
@@ -68,7 +68,7 @@ export const FileUploader = ({
       return `Arquivo muito grande: ${file.name} (máx: ${maxSizeMB}MB)`;
     }
     return null;
-  };
+  }, [accept, maxSizeMB]);
 
   const processFiles = useCallback(
     (fileList: FileList | File[]) => {
@@ -79,6 +79,12 @@ export const FileUploader = ({
 
       if (filesArray.length + files.length > maxFiles) {
         toast.error(`Máximo de ${maxFiles} arquivos permitidos`);
+        return;
+      }
+
+      const totalBytes = [...files, ...filesArray].reduce((sum, file) => sum + file.size, 0);
+      if (totalBytes > 4 * 1024 * 1024) {
+        toast.error("O total de arquivos da demonstração não pode ultrapassar 4 MB.");
         return;
       }
 
@@ -112,7 +118,7 @@ export const FileUploader = ({
         setTimeout(() => setErrors([]), 5000);
       }
     },
-    [files, maxFiles, maxSizeMB, accept, onFilesChange]
+    [files, maxFiles, onFilesChange, validateFile]
   );
 
   const handleDragOver = (e: React.DragEvent) => {

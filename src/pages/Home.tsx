@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Globe2, Sparkles, Users, Trophy, GraduationCap, Star, Quote } from "lucide-react";
+import { ArrowRight, Globe2, Sparkles, Users, Trophy, GraduationCap, Star, Quote, CalendarCheck2, TrendingUp } from "lucide-react";
 import { SEO } from "@/components/common/SEO";
 import { SectionHeader } from "@/components/common/SectionHeader";
 import { Button } from "@/components/ui/button";
@@ -10,10 +10,10 @@ import { loadCourses, type Course } from "@/services/courses";
 import { testimonials } from "@/mocks/teachers";
 
 const benefits = [
-  { icon: Globe2, title: "Professores nativos", desc: "Time global de 6 países, certificados e apaixonados por ensinar." },
+  { icon: Globe2, title: "Professores internacionais", desc: "Time global fictício, certificado e preparado para diferentes objetivos." },
   { icon: Sparkles, title: "Método imersivo", desc: "Aprenda em contexto real, com prática desde a primeira aula." },
   { icon: Users, title: "Turmas reduzidas", desc: "Máximo de 8 alunos por turma para atenção individualizada." },
-  { icon: Trophy, title: "Resultado garantido", desc: "Suba um nível em até 6 meses ou continue gratuitamente." },
+  { icon: Trophy, title: "Evolução acompanhada", desc: "Indicadores claros conectam aulas, prática e progresso acadêmico." },
 ];
 
 const Home = () => {
@@ -40,30 +40,35 @@ const Home = () => {
 
   return (
     <>
-      <SEO title="Aprenda inglês de verdade" description="Lumina English Academy — escola internacional com método imersivo, professores nativos e turmas reduzidas. Matricule-se hoje." />
+      <SEO title="Aprenda inglês de verdade" description="Lumina English Academy, experiência demonstrativa para gestão e aprendizagem de inglês." />
 
       {/* HERO */}
-      <section className="relative overflow-hidden bg-gradient-hero text-primary-foreground">
-        <div className="absolute inset-0 opacity-20" aria-hidden="true">
-          <div className="absolute -top-24 -right-24 h-96 w-96 rounded-full bg-accent blur-3xl" />
-          <div className="absolute -bottom-32 -left-24 h-96 w-96 rounded-full bg-secondary blur-3xl" />
+      <section className="relative overflow-hidden bg-primary text-primary-foreground">
+        <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] border-l border-primary-foreground/10 bg-primary-foreground/[0.04] lg:block" aria-hidden="true">
+          <div className="absolute left-10 right-10 top-20 rounded-lg border border-primary-foreground/15 bg-primary-foreground/10 p-5 shadow-elevated">
+            <div className="flex items-center justify-between"><span className="text-xs font-medium text-primary-foreground/70">Visão acadêmica</span><TrendingUp className="h-4 w-4 text-secondary" /></div>
+            <div className="mt-5 grid grid-cols-3 gap-3">{[["92%", "Presença"], ["4,8", "Satisfação"], ["18", "Aulas"]].map(([value, label]) => <div key={label} className="rounded-md bg-primary-foreground/10 p-3"><p className="text-xl font-bold">{value}</p><p className="mt-1 text-[11px] text-primary-foreground/60">{label}</p></div>)}</div>
+            <div className="mt-5 space-y-3">{[82, 68, 91].map((value, index) => <div key={value} className="flex items-center gap-3"><span className="w-20 text-xs text-primary-foreground/60">{["Speaking", "Writing", "Listening"][index]}</span><div className="h-2 flex-1 rounded-full bg-primary-foreground/10"><div className="h-2 rounded-full bg-secondary" style={{ width: `${value}%` }} /></div></div>)}</div>
+          </div>
+          <div className="absolute bottom-20 left-24 right-4 rounded-lg border border-primary-foreground/15 bg-primary-foreground/10 p-4 shadow-elevated">
+            <div className="flex items-center gap-3"><div className="grid h-10 w-10 place-items-center rounded-md bg-secondary text-secondary-foreground"><CalendarCheck2 className="h-5 w-5" /></div><div><p className="text-sm font-semibold">Conversation Lab</p><p className="text-xs text-primary-foreground/60">Hoje, 19:00 · Turma B1</p></div></div>
+          </div>
         </div>
         <div className="container-page relative py-20 md:py-28 lg:py-32">
-          <div className="max-w-3xl animate-fade-in">
+          <div className="max-w-2xl animate-fade-in">
             <Badge className="bg-primary-foreground/10 text-primary-foreground border border-primary-foreground/20 hover:bg-primary-foreground/15 mb-6">
-              <Sparkles className="h-3 w-3 mr-1.5" /> Novas turmas em maio
+              <Sparkles className="h-3 w-3 mr-1.5" /> Ambiente demonstrativo completo
             </Badge>
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight text-balance">
-              Aprenda inglês de verdade,{" "}
-              <span className="bg-gradient-to-r from-accent to-secondary bg-clip-text text-transparent">viva o mundo.</span>
+            <h1 className="text-4xl md:text-6xl font-bold leading-[1.05] tracking-normal text-balance">
+              Lumina English Academy
             </h1>
             <p className="mt-6 text-lg md:text-xl text-primary-foreground/80 leading-relaxed max-w-2xl">
-              Educação internacional com método imersivo, professores nativos e tecnologia de ponta. Mais de 12.000 alunos transformados desde 2015.
+              Uma experiência integrada para apresentar cursos, acompanhar alunos e operar uma escola de inglês com clareza.
             </p>
             <div className="mt-10 flex flex-col sm:flex-row gap-3">
-              <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground shadow-glow h-12 px-7">
-                <Link to="/cursos">
-                  Matricule-se agora <ArrowRight className="ml-2 h-4 w-4" />
+              <Button asChild size="lg" variant="secondary" className="h-12 px-7 shadow-soft">
+                <Link to="/login">
+                  Explorar a demonstração <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="h-12 px-7 bg-transparent border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground">
@@ -72,9 +77,9 @@ const Home = () => {
             </div>
             <div className="mt-12 grid grid-cols-3 gap-6 max-w-xl">
               {[
-                { v: "12k+", l: "Alunos formados" },
-                { v: "6", l: "Países de origem" },
-                { v: "4.9★", l: "Avaliação média" },
+                { v: "2", l: "Perfis de acesso" },
+                { v: "20+", l: "Fluxos navegáveis" },
+                { v: "100%", l: "Dados fictícios" },
               ].map((s) => (
                 <div key={s.l}>
                   <div className="text-2xl md:text-3xl font-bold">{s.v}</div>
@@ -116,7 +121,7 @@ const Home = () => {
           <div className="grid gap-6 md:grid-cols-3">
             {featured.map((c) => (
               <Card key={c.id} className="overflow-hidden hover:shadow-elevated hover:-translate-y-0.5 transition-all duration-300 group bg-card">
-                <div className="aspect-video bg-gradient-accent flex items-center justify-center text-primary-foreground">
+                <div className="aspect-video bg-primary flex items-center justify-center text-primary-foreground">
                   <GraduationCap className="h-12 w-12 opacity-90" />
                 </div>
                 <CardContent className="p-6 space-y-3">
@@ -141,7 +146,7 @@ const Home = () => {
 
       {/* DEPOIMENTOS */}
       <section className="container-page py-20 md:py-28">
-        <SectionHeader eyebrow="Depoimentos" title="Histórias reais de quem aprendeu com a gente" />
+        <SectionHeader eyebrow="Depoimentos" title="Histórias demonstrativas da jornada de aprendizagem" />
         <div className="mt-14 grid gap-6 md:grid-cols-3">
           {testimonials.map((t) => (
             <Card key={t.id} className="border-border/60 bg-card relative">
@@ -154,7 +159,7 @@ const Home = () => {
                 </div>
                 <p className="text-foreground/90 leading-relaxed">"{t.quote}"</p>
                 <div className="mt-6 flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-gradient-accent text-primary-foreground flex items-center justify-center font-semibold text-sm">{t.initials}</div>
+                  <div className="h-10 w-10 rounded-full bg-secondary text-secondary-foreground flex items-center justify-center font-semibold text-sm">{t.initials}</div>
                   <div>
                     <div className="font-semibold text-sm text-primary">{t.name}</div>
                     <div className="text-xs text-muted-foreground">{t.role}</div>
@@ -168,14 +173,13 @@ const Home = () => {
 
       {/* CTA FINAL */}
       <section className="container-page pb-24">
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-hero text-primary-foreground p-10 md:p-16 text-center">
-          <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-accent/30 blur-3xl" aria-hidden="true" />
-          <div className="relative max-w-2xl mx-auto">
+        <div className="rounded-lg bg-primary text-primary-foreground p-10 md:p-16 text-center">
+          <div className="max-w-2xl mx-auto">
             <h2 className="text-3xl md:text-5xl font-bold mb-4 text-balance">Pronto para destravar seu inglês?</h2>
             <p className="text-primary-foreground/80 text-lg mb-8">
               Faça uma aula experimental gratuita e descubra o nível ideal para você.
             </p>
-            <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground h-12 px-8 shadow-glow">
+            <Button asChild size="lg" variant="secondary" className="h-12 px-8 shadow-soft">
               <Link to="/contato">Quero minha aula gratuita <ArrowRight className="ml-2 h-4 w-4" /></Link>
             </Button>
           </div>

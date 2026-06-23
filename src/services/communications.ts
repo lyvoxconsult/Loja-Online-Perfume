@@ -19,6 +19,18 @@ export interface Communication {
   read: boolean;
 }
 
+const readKey = (userId: string) => `lumina:communications:read:${userId}`;
+const loadReadIds = (userId: string) => {
+  try {
+    return new Set<string>(JSON.parse(localStorage.getItem(readKey(userId)) ?? "[]") as string[]);
+  } catch {
+    return new Set<string>();
+  }
+};
+const saveReadIds = (userId: string, ids: Set<string>) => {
+  localStorage.setItem(readKey(userId), JSON.stringify([...ids]));
+};
+
 // Comunicados demo para seed
 const seedCommunications: Communication[] = [
   {
@@ -142,34 +154,27 @@ export const getCommunicationsForRecipient = (userId: string | null): Communicat
 };
 
 // Marcar comunicado como lido
-export const markCommunicationAsRead = (id: string): boolean => {
-  const communications = loadCommunications();
-  const index = communications.findIndex((c) => c.id === id);
-  if (index === -1) return false;
-
-  communications[index] = { ...communications[index], read: true };
-  persistCommunications(communications);
+export const markCommunicationAsRead = (id: string, userId: string): boolean => {
+  if (!loadCommunications().some((communication) => communication.id === id)) return false;
+  const readIds = loadReadIds(userId);
+  readIds.add(id);
+  saveReadIds(userId, readIds);
   return true;
 };
 
 // Marcar todos como lidos
 export const markAllCommunicationsAsRead = (userId: string | null): void => {
-  const communications = loadCommunications();
-  const updated = communications.map((c) => {
-    if (c.recipientId === null || c.recipientId === userId) {
-      return { ...c, read: true };
-    }
-    return c;
-  });
-  persistCommunications(updated);
+  if (!userId) return;
+  const readIds = loadReadIds(userId);
+  getCommunicationsForRecipient(userId).forEach((communication) => readIds.add(communication.id));
+  saveReadIds(userId, readIds);
 };
 
 // Contar não lidos
 export const countUnreadCommunications = (userId: string | null): number => {
-  const communications = loadCommunications();
-  return communications.filter(
-    (c) => !c.read && (c.recipientId === null || c.recipientId === userId)
-  ).length;
+  if (!userId || userId === "gestor") return 0;
+  const readIds = loadReadIds(userId);
+  return getCommunicationsForRecipient(userId).filter((communication) => !readIds.has(communication.id)).length;
 };
 
 // Limpar todos os comunicados (para testing/reset)
